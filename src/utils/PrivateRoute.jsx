@@ -20,7 +20,7 @@ const PrivateRoute = () => {
         setUser({
           id: user._id,
           email: user.email,
-          userName: user.name,
+          username: user.name,
           avatarUrl: user.avatarUrl,
         }),
       );

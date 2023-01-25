@@ -41,7 +41,7 @@ const SideBar = ({ isMobile }) => {
       className="w-60 h-screen overflow-y-auto bg-white hidden md:block"
     >
       <Link to="/" onClick={() => dispatch(setCategory('home'))}>
-        <img className="w-36 object-cover mt-6 px-4" alt="logo" src={logo} />
+        <img className="h-8 object-cover mt-6 px-4" alt="logo" src={logo} />
       </Link>
       <Link to="/" onClick={() => dispatch(setCategory('home'))}>
         <div

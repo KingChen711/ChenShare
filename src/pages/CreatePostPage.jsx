@@ -42,7 +42,7 @@ const CreatePostPage = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    if (!selectedImage) {
+    if (!selectedImage || wrongImageType) {
       return;
     }
 
@@ -171,7 +171,7 @@ const CreatePostPage = () => {
             src={user.avatarUrl}
             className="w-12 h-12 rounded-full my-6"
           />
-          <div className="ml-3 font-bold text-xl">{user.userName}</div>
+          <div className="ml-3 font-bold text-xl">{user.username}</div>
         </div>
         <input
           className="p-2 text-lg border-b border-b-gray-400 w-full"
@@ -195,8 +195,6 @@ const CreatePostPage = () => {
               {category}
             </option>
           ))}
-          <option value="A">Option A</option>
-          <option value="B">Option B</option>
         </select>
         {errors?.category && (
           <div className="text-red-500">Please select a category</div>
@@ -206,7 +204,6 @@ const CreatePostPage = () => {
           className="self-end"
           variant="contained"
           style={{
-            backgroundColor: '#ef4444',
             width: 'fit-content',
             borderRadius: '20px',
           }}

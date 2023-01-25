@@ -18,7 +18,7 @@ import SideBar from './SideBar';
 const NavBar = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
-  const isMobile = useMediaQuery('(max-width:768px)');
+  const isMobile = useMediaQuery('(max-width:767px)');
   const [openSideBar, setOpenSideBar] = useState(false);
   return (
     <div>

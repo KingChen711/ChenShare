@@ -3,17 +3,22 @@ import { URL_API } from '../utils/constants';
 
 const baseUrl = `${URL_API}/api/`;
 
+const headers = {
+  authorization: `Bearer ${localStorage.getItem('chen-share-token')}`,
+};
+
 export const rtkQueryChenShareAPI = createApi({
   reducerPath: 'chenShareApi',
   baseQuery: fetchBaseQuery({ baseUrl }),
-  // eslint-disable-next-line no-unused-vars
-  prepareHeaders: (headers, { getState }) => {
-    headers.set(
-      'Authorization',
-      `Bearer ${localStorage.getItem('chen-share-token')}`,
-    );
-    return headers;
-  },
+  // prepareHeaders: (headers, { options }) => {
+  //   options.headers = new Headers();
+  //   const token = localStorage.getItem('chen-share-token');
+  //   console.log(token);
+  //   if (token) {
+  //     options.headers.append('Authorization', `Bearer ${token}`);
+  //   }
+  //   return options;
+  // },
   endpoints: (builder) => ({
     getPosts: builder.query({
       query: ({ category, searchQuery }) => {
@@ -24,14 +29,20 @@ export const rtkQueryChenShareAPI = createApi({
 
         // get posts by category
         if (category && category !== '' && category !== 'home') {
-          return `post/get-posts-by-category/${category}`;
+          return `post/category/${category}`;
         }
 
         // default get all posts
-        return 'post/get-posts';
+        return 'post/all';
       },
+    }),
+    getPostsByUser: builder.query({
+      query: ({ type }) => ({
+        url: `post/user/${type}`,
+        headers,
+      }),
     }),
   }),
 });
 
-export const { useGetPostsQuery } = rtkQueryChenShareAPI;
+export const { useGetPostsQuery, useGetPostsByUserQuery } = rtkQueryChenShareAPI;
