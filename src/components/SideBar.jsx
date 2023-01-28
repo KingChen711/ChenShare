@@ -38,7 +38,6 @@ const SideBar = ({ isMobile }) => {
   const selectedCategory = useSelector(selectFilterPost).category;
 
   const handleChooseCategory = (category) => {
-    console.log('123');
     dispatch(setCategory(category));
     dispatch(setSearchQuery(''));
   };
