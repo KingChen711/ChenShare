@@ -15,10 +15,11 @@ const filterPost = createSlice({
     setSearchQuery: (state, action) => {
       state.searchQuery = action.payload;
     },
+    resetFilter: () => initialState,
   },
 });
 
-export const { setCategory, setSearchQuery } = filterPost.actions;
+export const { setCategory, setSearchQuery, resetFilter } = filterPost.actions;
 
 export const selectFilterPost = (state) => state.filterPost;
 

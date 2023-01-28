@@ -169,6 +169,7 @@ const CreatePostPage = () => {
           <img
             alt="avatar"
             src={user.avatarUrl}
+            referrerPolicy="no-referrer"
             className="w-12 h-12 rounded-full my-6"
           />
           <div className="ml-3 font-bold text-xl">{user.username}</div>

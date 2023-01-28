@@ -3,7 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import Posts from '../components/Posts';
 import { selectFilterPost } from '../features/filterPostSlice';
-import { useGetPostsQuery } from '../services/rtkQueryChenShareAPI';
+import { useGetPostsQuery } from '../services/chenShareAPI';
 
 const HomePage = () => {
   const { category, searchQuery } = useSelector(selectFilterPost);

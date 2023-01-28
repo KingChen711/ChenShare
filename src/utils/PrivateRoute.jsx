@@ -32,7 +32,7 @@ const PrivateRoute = () => {
     return (
       <div className="flex">
         <SideBar />
-        <div className="flex flex-col flex-1 h-screen overflow-y-auto">
+        <div className="flex flex-col flex-1 h-screen overflow-y-auto pb-8">
           <NavBar />
           <Outlet />
         </div>

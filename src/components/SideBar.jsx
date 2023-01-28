@@ -12,7 +12,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import categoryImages from '../assets/categories';
-import { selectFilterPost, setCategory } from '../features/filterPostSlice';
+import {
+  selectFilterPost,
+  setCategory,
+  setSearchQuery,
+} from '../features/filterPostSlice';
 
 const categories = [
   'cars',
@@ -33,6 +37,12 @@ const SideBar = ({ isMobile }) => {
   const dispatch = useDispatch();
   const selectedCategory = useSelector(selectFilterPost).category;
 
+  const handleChooseCategory = (category) => {
+    console.log('123');
+    dispatch(setCategory(category));
+    dispatch(setSearchQuery(''));
+  };
+
   return (
     <div
       style={{
@@ -40,10 +50,10 @@ const SideBar = ({ isMobile }) => {
       }}
       className="w-60 h-screen overflow-y-auto bg-white hidden md:block"
     >
-      <Link to="/" onClick={() => dispatch(setCategory('home'))}>
+      <Link to="/" onClick={() => handleChooseCategory('home')}>
         <img className="h-8 object-cover mt-6 px-4" alt="logo" src={logo} />
       </Link>
-      <Link to="/" onClick={() => dispatch(setCategory('home'))}>
+      <Link to="/" onClick={() => handleChooseCategory('home')}>
         <div
           style={{
             borderRight: selectedCategory === 'home' && '3px solid black',
@@ -66,7 +76,7 @@ const SideBar = ({ isMobile }) => {
               style={{
                 borderRight: selectedCategory === category && '3px solid black',
               }}
-              onClick={() => dispatch(setCategory(category))}
+              onClick={() => handleChooseCategory(category)}
               button
             >
               <ListItemIcon>

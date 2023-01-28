@@ -1,7 +1,7 @@
 import { Add } from '@mui/icons-material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -28,6 +28,7 @@ const NavBar = () => {
           <Link to={`/profile/${user.id}`}>
             <img
               alt="avatar"
+              referrerPolicy="no-referrer"
               src={user.avatarUrl}
               className="h-12 w-12 rounded-lg object-cover mr-2 ml-6"
             />
@@ -61,6 +62,7 @@ const NavBar = () => {
                   className="w-9 h-9 rounded-full"
                   alt="logo"
                   src={user.avatarUrl}
+                  referrerPolicy="no-referrer"
                 />
               </Link>
             </Toolbar>
@@ -99,11 +101,20 @@ const SearchBar = () => {
   const dispatch = useDispatch();
   const filterPost = useSelector(selectFilterPost);
   const [searchText, setSearchText] = useState(filterPost.searchQuery);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setSearchText(filterPost.searchQuery);
+  }, [filterPost]);
+
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
+        if (searchText === '') return;
         dispatch(setSearchQuery(searchText));
+        dispatch(setCategory(''));
+        navigate('/');
       }}
       className="flex-1 flex items-center bg-white rounded-lg"
     >
