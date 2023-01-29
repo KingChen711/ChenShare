@@ -3,13 +3,14 @@ import { URL_API } from '../utils/constants';
 
 const baseUrl = `${URL_API}/api/`;
 
-// const headers = {
-//   authorization: `Bearer ${localStorage.getItem('chen-share-token')}`,
-// };
+const headers = {
+  authorization: `Bearer ${localStorage.getItem('chen-share-token')}`,
+};
 
 export const chenShareAPI = createApi({
   reducerPath: 'chenShareApi',
   baseQuery: fetchBaseQuery({ baseUrl }),
+  tagTypes: ['Posts'],
   endpoints: (builder) => ({
     getPosts: builder.query({
       query: ({ category, searchQuery }) => {
@@ -26,15 +27,74 @@ export const chenShareAPI = createApi({
         // default get all posts
         return 'post/all';
       },
+      providesTags: ['Posts'],
     }),
     getPostDetail: builder.query({
       query: ({ postId }) => ({
         url: `post/${postId}`,
       }),
+      providesTags: ['Posts'],
     }),
     getUserDetail: builder.query({
       query: ({ userId }) => ({
         url: `user/${userId}`,
+      }),
+      providesTags: ['Posts'],
+    }),
+    postComment: builder.mutation({
+      query: ({ message, userId, postId }) => ({
+        url: 'comment',
+        method: 'POST',
+        body: {
+          message,
+          userId,
+          postId,
+        },
+      }),
+      invalidatesTags: ['Posts'],
+    }),
+    savePost: builder.mutation({
+      query: (body) => ({
+        url: 'user/save-post',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Posts'],
+    }),
+    createPost: builder.mutation({
+      query: (body) => ({
+        url: 'post/create-post',
+        method: 'POST',
+        body,
+        headers,
+      }),
+      invalidatesTags: ['Posts'],
+    }),
+    uploadFile: builder.mutation({
+      query: (body) => ({
+        url: 'file/upload',
+        method: 'POST',
+        body,
+      }),
+    }),
+    deleteFile: builder.mutation({
+      query: (body) => ({
+        url: 'file/delete',
+        method: 'DELETE',
+        body,
+      }),
+    }),
+    loginUser: builder.mutation({
+      query: (body) => ({
+        url: '/auth/login',
+        method: 'POST',
+        body,
+      }),
+    }),
+    getUserBasic: builder.query({
+      query: () => ({
+        url: '/auth/user',
+        headers,
       }),
     }),
   }),
@@ -44,4 +104,11 @@ export const {
   useGetPostsQuery,
   useGetUserDetailQuery,
   useGetPostDetailQuery,
+  usePostCommentMutation,
+  useSavePostMutation,
+  useCreatePostMutation,
+  useUploadFileMutation,
+  useDeleteFileMutation,
+  useLoginUserMutation,
+  useGetUserBasicQuery,
 } = chenShareAPI;

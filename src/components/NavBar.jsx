@@ -21,9 +21,9 @@ const NavBar = () => {
   const isMobile = useMediaQuery('(max-width:767px)');
   const [openSideBar, setOpenSideBar] = useState(false);
   return (
-    <div>
+    <AppBar position="sticky" style={{ backgroundColor: '#f1f5f9' }}>
       {!isMobile && (
-        <div className="flex items-center p-6">
+        <Toolbar className="flex items-center px-6 py-4">
           <SearchBar />
           <Link to={`/profile/${user.id}`}>
             <img
@@ -38,19 +38,13 @@ const NavBar = () => {
               <Add />
             </div>
           </Link>
-        </div>
+        </Toolbar>
       )}
 
       {isMobile && (
-        <div className="flex flex-col">
-          <AppBar
-            position="sticky"
-            style={{
-              backgroundColor: 'white',
-            }}
-            className=" mb-4 shadow-lg"
-          >
-            <Toolbar className="flex justify-between items-center w-full">
+        <Toolbar style={{ padding: 0 }} className="flex flex-col">
+          <div className="w-full">
+            <div className="flex justify-between items-center w-full px-6">
               <IconButton onClick={() => setOpenSideBar(true)}>
                 <MenuIcon sx={{ fontSize: '40px' }} />
               </IconButton>
@@ -65,7 +59,7 @@ const NavBar = () => {
                   referrerPolicy="no-referrer"
                 />
               </Link>
-            </Toolbar>
+            </div>
             <Drawer
               variant="temporary"
               anchor="right"
@@ -82,8 +76,8 @@ const NavBar = () => {
                 <SideBar isMobile />
               </div>
             </Drawer>
-          </AppBar>
-          <div className="flex items-center p-6">
+          </div>
+          <div className="flex items-center px-6 py-3 w-full">
             <SearchBar />
             <Link className="ml-4" to="/create-post">
               <div className="h-12 w-12 rounded-lg flex justify-center items-center bg-[#ef4444] text-white">
@@ -91,17 +85,17 @@ const NavBar = () => {
               </div>
             </Link>
           </div>
-        </div>
+        </Toolbar>
       )}
-    </div>
+    </AppBar>
   );
 };
 
 const SearchBar = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const filterPost = useSelector(selectFilterPost);
   const [searchText, setSearchText] = useState(filterPost.searchQuery);
-  const navigate = useNavigate();
 
   useEffect(() => {
     setSearchText(filterPost.searchQuery);
@@ -116,11 +110,11 @@ const SearchBar = () => {
         dispatch(setCategory(''));
         navigate('/');
       }}
-      className="flex-1 flex items-center bg-white rounded-lg"
+      className="flex-1 flex items-center border-b border-b-gray-500"
     >
-      <SearchIcon sx={{ marginLeft: '16px' }} />
+      <SearchIcon sx={{ color: 'black', marginLeft: '16px' }} />
       <input
-        className="flex-1 py-3 px-4 bg-transparent w-0"
+        className="flex-1 py-3 px-4 bg-transparent w-0 text-black"
         onChange={(e) => setSearchText(e.target.value)}
         value={searchText}
         placeholder="Search..."

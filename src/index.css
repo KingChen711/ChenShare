@@ -6,7 +6,6 @@
 @layer base {
   body {
     font-family: 'Roboto', sans-serif;
-    @apply bg-slate-100
   }
   input{
     outline: none;

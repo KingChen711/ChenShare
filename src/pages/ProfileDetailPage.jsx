@@ -12,7 +12,7 @@ const ProfileDetailPage = () => {
   const navigate = useNavigate();
   const { id: userIdStore } = useSelector(selectUser);
   const [selectedType, setSelectedType] = useState('created');
-  const { data, isFetching } = useGetUserDetailQuery({
+  const { data, isLoading } = useGetUserDetailQuery({
     userId: userIdParams,
   });
 
@@ -66,7 +66,7 @@ const ProfileDetailPage = () => {
           Saved
         </Button>
       </div>
-      {isFetching ? (
+      {isLoading ? (
         <Box display="flex " justifyContent="center">
           <CircularProgress size="4rem" />
         </Box>

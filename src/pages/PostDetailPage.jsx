@@ -1,60 +1,41 @@
-import {
-  Box,
-  Button,
-  CircularProgress,
-  IconButton,
-  useMediaQuery,
-} from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { Box, Button, CircularProgress, IconButton, useMediaQuery } from '@mui/material';
+import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 import { useSelector } from 'react-redux';
-import { useGetPostDetailQuery } from '../services/chenShareAPI';
+import {
+  useGetPostDetailQuery,
+  usePostCommentMutation,
+} from '../services/chenShareAPI';
 import { URL_API } from '../utils/constants';
 import { selectUser } from '../features/userSlice';
-import { chenShareApi } from '../utils/chenShareAPI';
 import Posts from '../components/Posts';
 
 const PostDetailPage = () => {
   const isMobile = useMediaQuery('(max-width:460px)');
   const user = useSelector(selectUser);
   const { id: postId } = useParams();
-  const { data, isFetching } = useGetPostDetailQuery({ postId });
+  const { data, isLoading } = useGetPostDetailQuery({ postId });
+  const [postComment] = usePostCommentMutation();
   const [isPostingComment, setIsPostingComment] = useState(false);
   const [commentText, setCommentText] = useState('');
-  const [comments, setComments] = useState([]);
 
-  useEffect(() => {
-    setComments(data?.post?.comments);
-  }, [data]);
-
-  const postComment = async () => {
+  const handlePostComment = async () => {
     if (!commentText) {
       return;
     }
     const message = commentText;
     setCommentText('');
     setIsPostingComment(true);
-    await chenShareApi.post('/comment', {
+    await postComment({
       message,
       userId: user.id,
       postId,
     });
-    setComments((prev) => [
-      ...prev,
-      {
-        message,
-        creator: {
-          _id: user.id,
-          name: user.username,
-          avatarUrl: user.avatarUrl,
-        },
-      },
-    ]);
     setIsPostingComment(false);
   };
 
-  if (isFetching) {
+  if (isLoading) {
     return (
       <Box display="flex " justifyContent="center">
         <CircularProgress size="4rem" />
@@ -96,7 +77,7 @@ const PostDetailPage = () => {
           </Link>
           <div className="text-3xl my-4">Comments</div>
           <div className="max-h-96 overflow-y-auto">
-            {comments?.map((comment) => (
+            {data?.post?.comments?.map((comment) => (
               <div className="flex mb-3">
                 <Link to={`/profile/${comment?.creator?._id}`}>
                   <img
@@ -128,7 +109,7 @@ const PostDetailPage = () => {
               className="flex-1 mx-4"
               onSubmit={(e) => {
                 e.preventDefault();
-                postComment();
+                handlePostComment();
               }}
             >
               <input
@@ -143,7 +124,7 @@ const PostDetailPage = () => {
             </form>
             <Button
               onClick={() => {
-                postComment();
+                handlePostComment();
               }}
               style={{
                 display: isMobile && 'none',
@@ -158,7 +139,7 @@ const PostDetailPage = () => {
           </div>
           <Button
             onClick={() => {
-              postComment();
+              handlePostComment();
             }}
             style={{ display: !isMobile && 'none' }}
             sx={{

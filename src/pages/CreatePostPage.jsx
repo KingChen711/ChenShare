@@ -8,8 +8,12 @@ import { useForm } from 'react-hook-form';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom';
 import { selectUser } from '../features/userSlice';
-import { chenShareApi } from '../utils/chenShareAPI';
 import { URL_API } from '../utils/constants';
+import {
+  useCreatePostMutation,
+  useDeleteFileMutation,
+  useUploadFileMutation,
+} from '../services/chenShareAPI';
 
 const categories = [
   'cars',
@@ -34,6 +38,9 @@ const CreatePostPage = () => {
   const [loadingImage, setLoadingImage] = useState(false);
   const [selectedImagePath, setSelectedImagePath] = useState('');
   const [isPosting, setIsPosting] = useState(false);
+  const [createPost] = useCreatePostMutation();
+  const [uploadFile] = useUploadFileMutation();
+  const [deleteFile] = useDeleteFileMutation();
 
   const {
     register,
@@ -56,7 +63,7 @@ const CreatePostPage = () => {
 
     const {
       data: { post },
-    } = await chenShareApi.post('post/create-post', formData);
+    } = await createPost(formData);
 
     navigate(`/post/${post._id}`);
   };
@@ -79,7 +86,7 @@ const CreatePostPage = () => {
       formData.append('image', e.target.files[0]);
       const {
         data: { imagePath },
-      } = await chenShareApi.post('/file/upload-file', formData);
+      } = await uploadFile(formData);
 
       setSelectedImagePath(imagePath);
       setLoadingImage(false);
@@ -89,7 +96,7 @@ const CreatePostPage = () => {
   };
 
   const removeImage = () => {
-    chenShareApi.post('/file/delete-file', { filePath: selectedImagePath });
+    deleteFile({ filePath: selectedImagePath });
     setSelectedImagePath('');
     setSelectedImage('');
   };

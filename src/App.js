@@ -9,6 +9,7 @@ import HomePage from './pages/HomePage';
 import PostDetailPage from './pages/PostDetailPage';
 import ProfileDetailPage from './pages/ProfileDetailPage';
 import PrivateRoute from './utils/PrivateRoute';
+import NotFoundPage from './pages/NotFoundPage';
 
 const theme = createTheme({
   palette: {
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/post/:id" element={<PostDetailPage />} />
             <Route path="/profile/:id" element={<ProfileDetailPage />} />
           </Route>
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </ThemeProvider>
     </GoogleOAuthProvider>

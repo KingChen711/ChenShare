@@ -7,9 +7,9 @@ import { useGetPostsQuery } from '../services/chenShareAPI';
 
 const HomePage = () => {
   const { category, searchQuery } = useSelector(selectFilterPost);
-  const { data, isFetching } = useGetPostsQuery({ category, searchQuery });
+  const { data, isLoading } = useGetPostsQuery({ category, searchQuery });
 
-  if (isFetching) {
+  if (isLoading) {
     return (
       <Box display="flex " justifyContent="center">
         <CircularProgress size="4rem" />

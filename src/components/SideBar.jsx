@@ -35,7 +35,7 @@ const categories = [
 
 const SideBar = ({ isMobile }) => {
   const dispatch = useDispatch();
-  const selectedCategory = useSelector(selectFilterPost).category;
+  const { category: selectedCategory } = useSelector(selectFilterPost);
 
   const handleChooseCategory = (category) => {
     dispatch(setCategory(category));
@@ -47,7 +47,7 @@ const SideBar = ({ isMobile }) => {
       style={{
         display: isMobile && 'block',
       }}
-      className="w-60 h-screen overflow-y-auto bg-white hidden md:block"
+      className="w-60 h-screen overflow-y-auto hidden md:block"
     >
       <Link to="/" onClick={() => handleChooseCategory('home')}>
         <img className="h-8 object-cover mt-6 px-4" alt="logo" src={logo} />
@@ -55,7 +55,7 @@ const SideBar = ({ isMobile }) => {
       <Link to="/" onClick={() => handleChooseCategory('home')}>
         <div
           style={{
-            borderRight: selectedCategory === 'home' && '3px solid black',
+            borderLeft: selectedCategory === 'home' && '3px solid black',
             color: selectedCategory === 'home' && 'black',
             fontWeight: selectedCategory === 'home' ? '700' : '500',
           }}
@@ -73,7 +73,7 @@ const SideBar = ({ isMobile }) => {
           <Link to="/" key={category}>
             <ListItem
               style={{
-                borderRight: selectedCategory === category && '3px solid black',
+                borderLeft: selectedCategory === category && '3px solid black',
               }}
               onClick={() => handleChooseCategory(category)}
               button

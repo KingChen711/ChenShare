@@ -7,16 +7,19 @@ import { useDispatch } from 'react-redux';
 import videoBg from '../assets/share.mp4';
 import { setUser } from '../features/userSlice';
 import logo from '../assets/logowhite.png';
-import { chenShareApi } from '../utils/chenShareAPI';
+import { useLoginUserMutation } from '../services/chenShareAPI';
 
 const AuthPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [loginUser] = useLoginUserMutation();
 
-  async function loginUser(googleToken) {
+  async function handleLoginUser(googleToken) {
     const userData = jwt_decode(googleToken);
 
-    const { data: { user, accessToken } } = await chenShareApi.post('/auth/login', {
+    const {
+      data: { user, accessToken },
+    } = await loginUser({
       email: userData.email,
       name: userData.name,
       avatarUrl: userData.picture,
@@ -51,7 +54,7 @@ const AuthPage = () => {
         <GoogleLogin
           onSuccess={(credentialResponse) => {
             const googleToken = credentialResponse.credential;
-            loginUser(googleToken);
+            handleLoginUser(googleToken);
           }}
           onError={() => {}}
         />
