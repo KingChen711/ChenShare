@@ -5,6 +5,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import MenuIcon from '@mui/icons-material/Menu';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import { AppBar, Drawer, IconButton, Toolbar } from '@mui/material';
 import {
   selectFilterPost,
@@ -26,12 +28,16 @@ const NavBar = () => {
         <Toolbar className="flex items-center px-6 py-4">
           <SearchBar />
           <Link to={`/profile/${user.id}`}>
-            <img
-              alt="avatar"
-              referrerPolicy="no-referrer"
-              src={user.avatarUrl}
-              className="h-12 w-12 rounded-lg object-cover mr-2 ml-6"
-            />
+            {user.avatarUrl ? (
+              <img
+                alt="avatar"
+                referrerPolicy="no-referrer"
+                src={user.avatarUrl}
+                className="h-12 w-12 rounded-lg object-cover mr-2 ml-6"
+              />
+            ) : (
+              <Skeleton className="w-12 h-12 rounded-lg mr-2 ml-6" />
+            )}
           </Link>
           <Link to="/create-post">
             <div className="h-12 w-12 rounded-lg flex justify-center items-center bg-[#ef4444] text-white">

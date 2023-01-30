@@ -47,7 +47,9 @@ const SideBar = ({ isMobile }) => {
           className="flex items-center my-1 py-3 px-4 mt-6 text-gray-500 hover:opacity-50 cursor-pointer"
         >
           <HomeIcon />
-          <div className="ml-2">Home</div>
+          <div className="ml-2">
+            Home
+          </div>
         </div>
       </Link>
       <List sx={{ color: 'black' }}>
