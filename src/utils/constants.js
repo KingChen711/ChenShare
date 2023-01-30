@@ -13,8 +13,8 @@ import {
   Face,
 } from '@mui/icons-material';
 
-// export const URL_API = 'https://zany-rose-whale-gear.cyclic.app';
-export const URL_API = 'http://localhost:5000';
+export const URL_API = 'https://zany-rose-whale-gear.cyclic.app';
+// export const URL_API = 'http://localhost:5000';
 
 export const categories = [
   {
