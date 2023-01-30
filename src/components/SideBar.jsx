@@ -11,27 +11,12 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
-import categoryImages from '../assets/categories';
 import {
   selectFilterPost,
   setCategory,
   setSearchQuery,
 } from '../features/filterPostSlice';
-
-const categories = [
-  'cars',
-  'fitness',
-  'wallpaper',
-  'websites',
-  'photo',
-  'food',
-  'nature',
-  'art',
-  'travel',
-  'quotes',
-  'cats',
-  'dogs',
-];
+import { categories } from '../utils/constants';
 
 const SideBar = ({ isMobile }) => {
   const dispatch = useDispatch();
@@ -69,40 +54,37 @@ const SideBar = ({ isMobile }) => {
         <ListSubheader sx={{ fontSize: '20px' }}>
           Discover categories
         </ListSubheader>
-        {categories.map((category) => (
-          <Link to="/" key={category}>
-            <ListItem
-              style={{
-                borderLeft: selectedCategory === category && '3px solid black',
-              }}
-              onClick={() => handleChooseCategory(category)}
-              button
-            >
-              <ListItemIcon>
-                <img
-                  className="h-8 w-8 rounded-full"
-                  alt="category_image"
-                  src={categoryImages[category]}
+        {categories.map((category) => {
+          const { value, icon } = category;
+          return (
+            <Link to="/" key={value}>
+              <ListItem
+                style={{
+                  borderLeft: selectedCategory === value && '3px solid black',
+                }}
+                onClick={() => handleChooseCategory(value)}
+                button
+              >
+                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemText
+                  disableTypography
+                  primary={(
+                    <Typography
+                      type="body2"
+                      style={{
+                        color: selectedCategory === value && 'black',
+                        fontWeight: selectedCategory === value ? '700' : '500',
+                      }}
+                      className="text-gray-500 capitalize"
+                    >
+                      {value}
+                    </Typography>
+                  )}
                 />
-              </ListItemIcon>
-              <ListItemText
-                disableTypography
-                primary={(
-                  <Typography
-                    type="body2"
-                    style={{
-                      color: selectedCategory === category && 'black',
-                      fontWeight: selectedCategory === category ? '700' : '500',
-                    }}
-                    className="text-gray-500 capitalize"
-                  >
-                    {category}
-                  </Typography>
-                )}
-              />
-            </ListItem>
-          </Link>
-        ))}
+              </ListItem>
+            </Link>
+          );
+        })}
       </List>
     </div>
   );

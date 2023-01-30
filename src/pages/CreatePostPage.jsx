@@ -8,27 +8,12 @@ import { useForm } from 'react-hook-form';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom';
 import { selectUser } from '../features/userSlice';
-import { URL_API } from '../utils/constants';
+import { categories, URL_API } from '../utils/constants';
 import {
   useCreatePostMutation,
   useDeleteFileMutation,
   useUploadFileMutation,
 } from '../services/chenShareAPI';
-
-const categories = [
-  'cars',
-  'fitness',
-  'wallpaper',
-  'websites',
-  'photo',
-  'food',
-  'nature',
-  'art',
-  'travel',
-  'quotes',
-  'cats',
-  'dogs',
-];
 
 const CreatePostPage = () => {
   const navigate = useNavigate();
@@ -199,8 +184,12 @@ const CreatePostPage = () => {
             Select category...
           </option>
           {categories.map((category) => (
-            <option key={category} className="capitalize" value={category}>
-              {category}
+            <option
+              key={category.value}
+              className="capitalize"
+              value={category.value}
+            >
+              {category.value}
             </option>
           ))}
         </select>

@@ -1,4 +1,11 @@
-import { Box, Button, CircularProgress, IconButton, useMediaQuery } from '@mui/material';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  Typography,
+  useMediaQuery,
+} from '@mui/material';
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
@@ -10,12 +17,13 @@ import {
 import { URL_API } from '../utils/constants';
 import { selectUser } from '../features/userSlice';
 import Posts from '../components/Posts';
+import Comment from '../components/Comment';
 
 const PostDetailPage = () => {
   const isMobile = useMediaQuery('(max-width:460px)');
   const user = useSelector(selectUser);
   const { id: postId } = useParams();
-  const { data, isLoading } = useGetPostDetailQuery({ postId });
+  const { data, isLoading, isError } = useGetPostDetailQuery({ postId });
   const [postComment] = usePostCommentMutation();
   const [isPostingComment, setIsPostingComment] = useState(false);
   const [commentText, setCommentText] = useState('');
@@ -34,6 +42,26 @@ const PostDetailPage = () => {
     });
     setIsPostingComment(false);
   };
+
+  const handleDownloadImage = async (e) => {
+    e.preventDefault();
+    const imageUrl = `${URL_API}/${data?.post?.imageUrl}`;
+    const response = await fetch(imageUrl);
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'image.jpg';
+    link.click();
+  };
+
+  if (isError) {
+    return (
+      <Box display="flex " justifyContent="center">
+        <Typography variant="h2">Interval server error</Typography>
+      </Box>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -54,19 +82,19 @@ const PostDetailPage = () => {
           />
         </div>
         <div className="xl:basis-1/2">
-          <IconButton>
+          <IconButton onClick={handleDownloadImage}>
             <DownloadForOfflineIcon
               sx={{ fontSize: '36px', marginBlock: '8px' }}
             />
           </IconButton>
           <div className="font-bold text-4xl">{data?.post?.title}</div>
-          <div className="my-3">{data?.post?.message}</div>
+          <div className="mt-3 text-2xl">{data?.post?.message}</div>
           <Link
             to={`/profile/${data?.post?.creator?._id}`}
-            className="flex items-center"
+            className="flex items-center my-6"
           >
             <img
-              className="w-9 h-9 rounded-full"
+              className="w-12 h-12 rounded-full"
               alt="avatar"
               src={data?.post?.creator?.avatarUrl}
               referrerPolicy="no-referrer"
@@ -75,25 +103,10 @@ const PostDetailPage = () => {
               {data?.post?.creator?.name}
             </div>
           </Link>
-          <div className="text-3xl my-4">Comments</div>
+          <div className="text-3xl mb-4">Comments</div>
           <div className="max-h-96 overflow-y-auto">
             {data?.post?.comments?.map((comment) => (
-              <div className="flex mb-3">
-                <Link to={`/profile/${comment?.creator?._id}`}>
-                  <img
-                    className="w-9 h-9 rounded-full"
-                    alt="avatar"
-                    src={comment?.creator?.avatarUrl}
-                    referrerPolicy="no-referrer"
-                  />
-                </Link>
-                <div className="flex flex-col ml-3">
-                  <div className="font-bold text-lg">
-                    {comment?.creator.name}
-                  </div>
-                  <div>{comment?.message}</div>
-                </div>
-              </div>
+              <Comment key={comment._id} data={comment} />
             ))}
           </div>
           <div className="flex my-4">

@@ -3,10 +3,6 @@ import { URL_API } from '../utils/constants';
 
 const baseUrl = `${URL_API}/api/`;
 
-const headers = {
-  authorization: `Bearer ${localStorage.getItem('chen-share-token')}`,
-};
-
 export const chenShareAPI = createApi({
   reducerPath: 'chenShareApi',
   baseQuery: fetchBaseQuery({ baseUrl }),
@@ -66,7 +62,9 @@ export const chenShareAPI = createApi({
         url: 'post/create-post',
         method: 'POST',
         body,
-        headers,
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('chen-share-token')}`,
+        },
       }),
       invalidatesTags: ['Posts'],
     }),
@@ -94,7 +92,9 @@ export const chenShareAPI = createApi({
     getUserBasic: builder.query({
       query: () => ({
         url: '/auth/user',
-        headers,
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('chen-share-token')}`,
+        },
       }),
     }),
   }),

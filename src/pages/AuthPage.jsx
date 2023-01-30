@@ -3,40 +3,28 @@ import { GoogleLogin } from '@react-oauth/google';
 // eslint-disable-next-line import/no-extraneous-dependencies, camelcase
 import jwt_decode from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import videoBg from '../assets/share.mp4';
-import { setUser } from '../features/userSlice';
 import logo from '../assets/logowhite.png';
 import { useLoginUserMutation } from '../services/chenShareAPI';
 
 const AuthPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [loginUser] = useLoginUserMutation();
 
   async function handleLoginUser(googleToken) {
     const userData = jwt_decode(googleToken);
 
-    const {
-      data: { user, accessToken },
-    } = await loginUser({
+    await loginUser({
       email: userData.email,
       name: userData.name,
       avatarUrl: userData.picture,
-    });
-
-    dispatch(
-      setUser({
-        id: user._id,
-        email: user.email,
-        username: user.name,
-        avatarUrl: user.avatarUrl,
-      }),
-    );
-
-    localStorage.setItem('chen-share-token', accessToken);
-
-    navigate('/');
+    })
+      .then((res) => {
+        localStorage.setItem('chen-share-token', res.data.accessToken);
+      })
+      .then(() => {
+        navigate('/');
+      });
   }
 
   return (

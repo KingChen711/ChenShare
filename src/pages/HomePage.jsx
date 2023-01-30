@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import Posts from '../components/Posts';
@@ -7,7 +7,18 @@ import { useGetPostsQuery } from '../services/chenShareAPI';
 
 const HomePage = () => {
   const { category, searchQuery } = useSelector(selectFilterPost);
-  const { data, isLoading } = useGetPostsQuery({ category, searchQuery });
+  const { data, isLoading, isError } = useGetPostsQuery({
+    category,
+    searchQuery,
+  });
+
+  if (isError) {
+    return (
+      <Box display="flex " justifyContent="center">
+        <Typography variant="h2">Interval server error</Typography>
+      </Box>
+    );
+  }
 
   if (isLoading) {
     return (

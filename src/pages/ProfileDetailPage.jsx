@@ -1,4 +1,10 @@
-import { Box, Button, CircularProgress, IconButton } from '@mui/material';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  Typography,
+} from '@mui/material';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -12,31 +18,45 @@ const ProfileDetailPage = () => {
   const navigate = useNavigate();
   const { id: userIdStore } = useSelector(selectUser);
   const [selectedType, setSelectedType] = useState('created');
-  const { data, isLoading } = useGetUserDetailQuery({
+  const { data, isLoading, isError } = useGetUserDetailQuery({
     userId: userIdParams,
   });
-
-  const changeType = () => {
-    setSelectedType((prev) => (prev === 'created' ? 'saved' : 'created'));
-  };
 
   const logOut = () => {
     localStorage.clear();
     navigate('/auth');
   };
 
+  if (isError) {
+    return (
+      <Box display="flex " justifyContent="center">
+        <Typography variant="h2">Interval server error</Typography>
+      </Box>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <Box display="flex " justifyContent="center">
+        <CircularProgress size="4rem" />
+      </Box>
+    );
+  }
+
   return (
     <div>
       <div className="relative">
-        <img
-          alt="thumbnail"
-          src="https://source.unsplash.com/1600x900/?nature,photography,technology"
-          className="w-full h-36 md:h-80 lg:h-[500px] object-cover"
+        <div
+          style={{
+            background:
+              'linear-gradient(90deg, rgba(82,190,255,1) 0%, rgba(116,233,80,1) 100%)',
+          }}
+          className="w-full h-36 sm:h-56 md:h-80 lg:h-[500px]"
         />
         {userIdParams === userIdStore && (
-          <div className="flex justify-center rounded-full bg-white items-center w-12 h-12 absolute top-4 right-4">
+          <div className="flex justify-center rounded-full bg-white items-center w-16 h-16 absolute top-4 right-4">
             <IconButton onClick={logOut}>
-              <LogoutIcon style={{ color: '#ef4444' }} />
+              <LogoutIcon style={{ color: '#ef4444', fontSize: '36px' }} />
             </IconButton>
           </div>
         )}
@@ -52,7 +72,7 @@ const ProfileDetailPage = () => {
       </div>
       <div className="flex justify-center">
         <Button
-          onClick={() => changeType()}
+          onClick={() => setSelectedType('created')}
           variant={selectedType === 'created' ? 'contained' : 'outlined'}
           sx={{ marginRight: '16px', borderRadius: '20px' }}
         >
@@ -60,19 +80,13 @@ const ProfileDetailPage = () => {
         </Button>
         <Button
           sx={{ borderRadius: '20px' }}
-          onClick={() => changeType()}
+          onClick={() => setSelectedType('saved')}
           variant={selectedType === 'saved' ? 'contained' : 'outlined'}
         >
           Saved
         </Button>
       </div>
-      {isLoading ? (
-        <Box display="flex " justifyContent="center">
-          <CircularProgress size="4rem" />
-        </Box>
-      ) : (
-        <Posts posts={data?.user[`${selectedType}Posts`]} />
-      )}
+      <Posts posts={data?.user[`${selectedType}Posts`]} />
     </div>
   );
 };
