@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import SideBar from '../components/SideBar';
 import NavBar from '../components/NavBar';
 import { setUser } from '../features/userSlice';
@@ -9,7 +10,7 @@ import { useGetUserBasicQuery } from '../services/chenShareAPI';
 const PrivateRoute = () => {
   const token = localStorage.getItem('chen-share-token');
   const dispatch = useDispatch();
-  const { data } = useGetUserBasicQuery();
+  const { data, isError, isLoading } = useGetUserBasicQuery();
 
   useEffect(() => {
     async function getUserData() {
@@ -24,6 +25,22 @@ const PrivateRoute = () => {
     }
     getUserData();
   }, [data]);
+
+  if (isError) {
+    return (
+      <Box display="flex " justifyContent="center">
+        <Typography variant="h2">Interval server error</Typography>
+      </Box>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <Box display="flex " justifyContent="center">
+        <CircularProgress size="4rem" />
+      </Box>
+    );
+  }
 
   if (token && token !== 'undefined') {
     return (
