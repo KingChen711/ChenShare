@@ -26,7 +26,8 @@ const PrivateRoute = () => {
     getUserData();
   }, [data]);
 
-  if (isError) {
+  // execute when have token but error when get auth user
+  if (token && isError) {
     return (
       <Box display="flex " justifyContent="center">
         <Typography variant="h2">Interval server error</Typography>
